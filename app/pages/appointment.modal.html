@@ -1,0 +1,16 @@
+<modal #details (onSubmit)="submit(f)">
+  <modal-content>
+    <form #f="ngForm" novalidate>
+        <p>{{from | date:"h:mm a"}} - {{to | date:"h:mm a"}}</p>
+        <label>Full Name</label>
+        <input name="fullName" [(ngModel)]="fullName" type="type" class="form-control" 
+          placeholder="Please enter your full name" required />
+        <br />
+        <label>Contact Phone</label>
+        <input name="contactPhone" [(ngModel)]="contactPhone" type="type" class="form-control"
+          placeholder="Please enter your phone number" required />
+    </form>
+  </modal-content>
+  <modal-footer>
+  </modal-footer>
+</modal>

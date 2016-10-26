@@ -1,0 +1,8 @@
+<ul class="slots">
+  <li *ngFor="let slot of slots" (click)="onSelect(slot)" [class.selected]="slot === selectedSlot" [class.booked]="slot.fullName.length > 0 && slot.contactPhone.length > 0">
+    <span class="slot-element">
+      {{slot.from | date:"h:mm a"}} - {{slot.to | date:"h:mm a"}}
+    </span>
+  </li>
+</ul>
+<appointment-modal #appointment></appointment-modal>
