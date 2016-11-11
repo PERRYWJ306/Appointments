@@ -1,7 +1,7 @@
-import { NgModule } from '@angular/core';
+import { NgModule, Component } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
-import { HttpModule } from '@angular/http';
+import { HttpModule } from '@angular/http'; 
 import { ModalModule } from 'ng2-modal';
 import { AppointmentModal } from './pages/appointment.modal';
 

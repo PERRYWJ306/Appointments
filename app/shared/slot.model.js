@@ -1,6 +1,7 @@
 "use strict";
 var SlotModel = (function () {
-    function SlotModel(from, to) {
+    function SlotModel(_id, from, to) {
+        this._id = _id;
         this.from = from;
         this.to = to;
         this.fullName = "";

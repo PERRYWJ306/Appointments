@@ -10,21 +10,25 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 var core_1 = require('@angular/core');
 var router_1 = require('@angular/router');
-var slot_model_1 = require('../shared/slot.model');
 var appointment_modal_1 = require('../pages/appointment.modal');
+var http_1 = require('@angular/http');
+require('rxjs/add/operator/map');
 var AppointmentPage = (function () {
-    function AppointmentPage(router) {
+    function AppointmentPage(router, http) {
         this.router = router;
+        this.http = http;
     }
     AppointmentPage.prototype.ngOnInit = function () {
-        this.slots = new Array();
-        var f = new Date();
-        var t = new Date();
-        for (var h = 9; h < 17; h++) {
-            f.setHours(h, 0, 0, 0);
-            t.setHours(h + 1, 0, 0, 0);
-            this.slots.push(new slot_model_1.SlotModel(new Date(f), new Date(t)));
-        }
+        var _this = this;
+        var headers = new http_1.Headers();
+        headers.append('Content-Type', 'application/json');
+        this.http.get('http://localhost:3001/slots', { headers: headers })
+            .map(function (res) { return res.json(); })
+            .subscribe(function (res) {
+            _this.slots = res.data;
+        }, function (err) {
+            alert(err);
+        }, function () { return console.log(''); });
     };
     AppointmentPage.prototype.onSelect = function (slot) {
         this.detail.open(slot);
@@ -39,7 +43,7 @@ var AppointmentPage = (function () {
             templateUrl: './app/pages/appointment.page.html',
             styleUrls: ['./app/pages/appointment.page.css']
         }), 
-        __metadata('design:paramtypes', [router_1.Router])
+        __metadata('design:paramtypes', [router_1.Router, http_1.Http])
     ], AppointmentPage);
     return AppointmentPage;
 }());

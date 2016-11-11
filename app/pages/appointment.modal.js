@@ -10,8 +10,11 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 var core_1 = require("@angular/core");
 var ng2_modal_1 = require("ng2-modal");
+var http_1 = require('@angular/http');
+require('rxjs/add/operator/map');
 var AppointmentModal = (function () {
-    function AppointmentModal() {
+    function AppointmentModal(http) {
+        this.http = http;
     }
     AppointmentModal.prototype.ngOnInit = function () {
     };
@@ -24,11 +27,22 @@ var AppointmentModal = (function () {
         if (f.valid || f.touched) {
             this.slot.fullName = this.fullName;
             this.slot.contactPhone = this.contactPhone;
+            var headers = new http_1.Headers();
+            headers.append('Content-Type', 'application/json');
+            var body = JSON.stringify(this.slot);
+            this.http.put('http://localhost:3001/slot/' + this.slot._id, body, { headers: headers })
+                .map(function (res) { return res.json(); })
+                .subscribe(function (res) {
+                //alert(res);
+            }, function (err) {
+                alert(err);
+            }, function () { return console.log(''); });
         }
         this.details.close();
     };
     AppointmentModal.prototype.open = function (slot) {
         this.slot = slot;
+        this._id = slot._id;
         this.from = slot.from;
         this.to = slot.to;
         this.fullName = slot.fullName;
@@ -47,7 +61,7 @@ var AppointmentModal = (function () {
             selector: "appointment-modal",
             templateUrl: './app/pages/appointment.modal.html',
         }), 
-        __metadata('design:paramtypes', [])
+        __metadata('design:paramtypes', [http_1.Http])
     ], AppointmentModal);
     return AppointmentModal;
 }());

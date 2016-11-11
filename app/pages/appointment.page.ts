@@ -3,6 +3,9 @@ import { Router } from '@angular/router';
 import { SlotModel } from '../shared/slot.model';
 import { Modal } from "ng2-modal";
 import { AppointmentModal } from '../pages/appointment.modal';
+import { Http, Headers, Response} from '@angular/http';
+import { Observable } from 'rxjs';
+import 'rxjs/add/operator/map';
 
 @Component({
   selector: 'appointment-page',
@@ -10,29 +13,34 @@ import { AppointmentModal } from '../pages/appointment.modal';
   styleUrls: ['./app/pages/appointment.page.css']
 })
 export class AppointmentPage implements OnInit {
-  private slots: Array<SlotModel>;
+  private slots: Observable<SlotModel[]>;  
   private selectedSlot: SlotModel;
   @ViewChild('appointment') detail: AppointmentModal; 
 
-  constructor(private router: Router) {
+  constructor(private router: Router, public http: Http) {
 
   }
 
   ngOnInit(): void {
-    this.slots = new Array<SlotModel>();
+    let headers = new Headers();
+    headers.append('Content-Type', 'application/json');
 
-    var f = new Date();
-    var t = new Date();
-
-    for(var h = 9; h < 17; h++) {
-        f.setHours(h, 0, 0, 0);
-        t.setHours(h+1, 0, 0, 0);
-
-        this.slots.push(new SlotModel(new Date(f), new Date(t)));       
-    }   
+    this.http.get('http://localhost:3001/slots', { headers: headers })
+      .map((res: Response) => res.json())
+      .subscribe(
+        res => {
+          this.slots = res.data;
+        },
+        err => {
+          alert(err);
+        },
+        () => console.log('')
+      );
   }
 
   onSelect(slot) {
     this.detail.open(slot);
   }
 }
+
+
